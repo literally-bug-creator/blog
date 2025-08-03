@@ -33,4 +33,5 @@ echo "Extra flags: $EXTRA_FLAGS"
 exec hugo server \
     --bind="$HUGO_BIND" \
     --baseURL="$HUGO_BASEURL" \
+    --appendPort=false \
     $EXTRA_FLAGS
