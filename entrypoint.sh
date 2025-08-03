@@ -4,7 +4,7 @@ if [ ! -f "config.yaml" ] && [ ! -f "config.yml" ] && [ ! -f "config.toml" ]; th
     echo "WARNING: Configuration file not found!"
 fi
 
-HUGO_BASEURL=${HUGO_BASEURL:-"http://localhost:1313"}
+HUGO_BASEURL=${HUGO_BASEURL:-"http://lib.bugme.tech"}
 HUGO_BIND=${HUGO_BIND:-"0.0.0.0"}
 HUGO_PORT=${HUGO_PORT:-"1313"}
 
