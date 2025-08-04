@@ -1,7 +1,7 @@
 baseURL = 'https://literally-bug-creator.github.io/blog/'
 languageCode = 'en-us'
 title = 'Blog'
-theme = 'ananke'
+theme = 'PaperMod'
 
 
 [caches]
