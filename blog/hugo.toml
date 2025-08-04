@@ -2,3 +2,8 @@ baseURL = 'https://lib.bugme.tech/'
 languageCode = 'en-us'
 title = 'Blog'
 theme = 'PaperMod'
+
+
+[caches]
+[caches.images]
+dir = ':cacheDir/images'
