@@ -78,7 +78,7 @@ params:
   socialIcons:
     - name: github
       title: View Source on Github
-      url: "https://github.com/adityatelange/hugo-PaperMod"
+      url: "https://github.com/literally-bug-creator"
     - name: telegram
       title: My Telegram
       url: "https://t.me/literally_bug_creator"
