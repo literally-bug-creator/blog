@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://literally-bug-creator.github.io/blog/sitemap.xml

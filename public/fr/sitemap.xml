@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://literally-bug-creator.github.io/blog/fr/frcategories/</loc>
+  </url><url>
+    <loc>https://literally-bug-creator.github.io/blog/fr/frseries/</loc>
+  </url><url>
+    <loc>https://literally-bug-creator.github.io/blog/fr/frtags/</loc>
+  </url><url>
+    <loc>https://literally-bug-creator.github.io/blog/fr/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://literally-bug-creator.github.io/blog/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="fa"
+                href="https://literally-bug-creator.github.io/blog/fa/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://literally-bug-creator.github.io/blog/fr/"
+                />
+  </url>
+</urlset>

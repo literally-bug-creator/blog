@@ -1,9 +1,0 @@
-baseURL = 'https://literally-bug-creator.github.io/blog/'
-languageCode = 'en-us'
-title = 'Blog'
-theme = 'PaperMod'
-
-
-[caches]
-[caches.images]
-dir = ':cacheDir/images'
