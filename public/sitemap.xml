@@ -2,17 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:34509/blog/</loc>
+    <loc>https://literally-bug-creator.github.io/blog/</loc>
     <lastmod>2025-08-04T15:00:10+03:00</lastmod>
   </url><url>
-    <loc>http://localhost:34509/blog/posts/my-first-post/</loc>
+    <loc>https://literally-bug-creator.github.io/blog/posts/</loc>
     <lastmod>2025-08-04T15:00:10+03:00</lastmod>
   </url><url>
-    <loc>http://localhost:34509/blog/posts/</loc>
-    <lastmod>2025-08-04T15:00:10+03:00</lastmod>
+    <loc>https://literally-bug-creator.github.io/blog/categories/</loc>
   </url><url>
-    <loc>http://localhost:34509/blog/categories/</loc>
-  </url><url>
-    <loc>http://localhost:34509/blog/tags/</loc>
+    <loc>https://literally-bug-creator.github.io/blog/tags/</loc>
   </url>
 </urlset>
