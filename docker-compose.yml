@@ -17,7 +17,7 @@ services:
       - HUGO_CACHEDIR=/tmp/hugo_cache
     volumes:
       - "./src:/src"
-    command: "hugo server --disableFastRender"
+    command: "hugo server --bind 0.0.0.0 --appendPort=false --disableFastRender"
     <<: *logging
 
 networks:
