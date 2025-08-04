@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Posts on PaperMod</title>
+    <title>Posts on Blog</title>
     <link>https://literally-bug-creator.github.io/blog/posts/</link>
-    <description>Recent content in Posts on PaperMod</description>
+    <description>Recent content in Posts on Blog</description>
     <image>
-      <title>PaperMod</title>
+      <title>Blog</title>
       <url>https://literally-bug-creator.github.io/blog/images/papermod-cover.png</url>
       <link>https://literally-bug-creator.github.io/blog/images/papermod-cover.png</link>
     </image>
     <generator>Hugo -- 0.148.2</generator>
     <language>en</language>
-    <copyright>PaperMod Contributors</copyright>
-    <lastBuildDate></lastBuildDate>
+    <copyright>Ivan Deyna</copyright>
+    <lastBuildDate>Mon, 04 Aug 2025 15:00:10 +0300</lastBuildDate>
     <atom:link href="https://literally-bug-creator.github.io/blog/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>My First Post</title>
+      <link>https://literally-bug-creator.github.io/blog/posts/my-first-post/</link>
+      <pubDate>Mon, 04 Aug 2025 15:00:10 +0300</pubDate>
+      <guid>https://literally-bug-creator.github.io/blog/posts/my-first-post/</guid>
+      <description></description>
+    </item>
   </channel>
 </rss>
