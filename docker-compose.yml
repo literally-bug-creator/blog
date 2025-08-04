@@ -1,20 +1,26 @@
+x-logging: &logging
+  logging:
+    driver: "json-file"
+    options:
+      max-size: "100m"
+      max-file: "3"
+
 services:
-  hugo:
-    image: hugomods/hugo:latest
-    container_name: hugo
-    restart: unless-stopped
-    env_file:
-      - .env
-    expose:
-      - "1313"
+  blog:
+    image: hugomods/hugo:exts-non-root
+    container_name: hugo_blog
+    restart: always
+    # user: "1001:1001"
+    ports:
+      - "1313:1313"
+    environment:
+      - HUGO_CACHEDIR=/tmp/hugo_cache
     volumes:
-      - ./src:/src
-      - ./public:/target
-      - ./entrypoint.sh:/entrypoint.sh
-    entrypoint: "/entrypoint.sh"
-    working_dir: /src
+      - "./src:/src"
+    command: "hugo server --disableFastRender"
+    <<: *logging
 
 networks:
   default:
+    name: ${EXTERNAL_NETWORK_NAME}
     external: true
-    name: ${EXTERNAL_NETWORK:-nginxpm}
