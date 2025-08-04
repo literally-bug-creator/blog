@@ -2,23 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://literally-bug-creator.github.io/blog/</loc>
-    <lastmod>2025-08-04T15:00:10+03:00</lastmod>
+    <loc>https://blog.bugme.tech/archives/</loc>
   </url><url>
-    <loc>https://literally-bug-creator.github.io/blog/posts/my-first-post/</loc>
-    <lastmod>2025-08-04T15:00:10+03:00</lastmod>
+    <loc>https://blog.bugme.tech/</loc>
   </url><url>
-    <loc>https://literally-bug-creator.github.io/blog/posts/</loc>
-    <lastmod>2025-08-04T15:00:10+03:00</lastmod>
+    <loc>https://blog.bugme.tech/categories/</loc>
   </url><url>
-    <loc>https://literally-bug-creator.github.io/blog/archives/</loc>
+    <loc>https://blog.bugme.tech/search/</loc>
   </url><url>
-    <loc>https://literally-bug-creator.github.io/blog/categories/</loc>
+    <loc>https://blog.bugme.tech/series/</loc>
   </url><url>
-    <loc>https://literally-bug-creator.github.io/blog/search/</loc>
-  </url><url>
-    <loc>https://literally-bug-creator.github.io/blog/series/</loc>
-  </url><url>
-    <loc>https://literally-bug-creator.github.io/blog/tags/</loc>
+    <loc>https://blog.bugme.tech/tags/</loc>
   </url>
 </urlset>

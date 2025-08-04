@@ -1,4 +1,4 @@
-baseURL: "https://literally-bug-creator.github.io/blog/"
+baseURL: "https://blog.bugme.tech/"
 title: Blog
 copyright: "© [Ivan Deyna](https://github.com/literally-bug-creator)"
 theme: [PaperMod]
