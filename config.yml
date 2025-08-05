@@ -68,12 +68,23 @@ params:
   images: ["images/papermod-cover.png"]
 
   profileMode:
-    enabled: false
+    enabled: true
+    title: "Ivan Deyna"
+    subtitle: "Software Developer & Tech Enthusiast"
+    imageUrl: "images/avatar.jpg"
+    imageWidth: 150
+    imageHeight: 150
+    imageTitle: "Ivan Deyna"
+    buttons:
+      - name: Posts
+        url: posts
+      - name: Archive
+        url: archives
 
-  homeInfoParams:
-    Title: "Ivan Deyna's blog"
-    Content: >
-      👋 Welcome to my blog!
+  # homeInfoParams:
+  #   Title: "Ivan Deyna's blog"
+  #   Content: >
+  #     👋 Welcome to my blog!
 
   socialIcons:
     - name: github
