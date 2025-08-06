@@ -87,20 +87,32 @@ Interpreter - it&rsquo;s a behaviour design pattern, which describes a way to re
                         darkMode: true,
                         primaryColor: "#bb86fc",
                         primaryTextColor: "#e1e1e1",
-                        primaryBorderColor: "#7c4dff",
+                        primaryBorderColor: "#bb86fc",
                         lineColor: "#f1f1f1",
-                        sectionBkgColor: "#1a1a1a",
-                        altSectionBkgColor: "#2a2a2a",
+                        sectionBkgColor: "#2a2a2a",
+                        altSectionBkgColor: "#1a1a1a",
                         gridColor: "#404040",
                         secondaryColor: "#03dac6",
                         tertiaryColor: "#cf6679",
                         background: "#121212",
-                        mainBkg: "#1e1e1e",
-                        secondBkg: "#2a2a2a",
+                        mainBkg: "#2a2a2a",
+                        secondBkg: "#1a1a1a",
                         tertiaryBkg: "#3a3a3a",
-                        cScale0: "#121212",
+                        cScale0: "#2a2a2a",
                         cScale1: "#1e1e1e",
-                        cScale2: "#2a2a2a",
+                        cScale2: "#121212",
+                        
+                        classText: "#e1e1e1",
+                        
+                        relationColor: "#f1f1f1",
+                        
+                        nodeBkg: "#2a2a2a",
+                        nodeBorder: "#bb86fc",
+                        clusterBkg: "#1a1a1a",
+                        clusterBorder: "#bb86fc",
+                        
+                        titleColor: "#e1e1e1",
+                        edgeLabelBackground: "#2a2a2a",
                     },
                 };
             } else {
@@ -186,6 +198,65 @@ Interpreter - it&rsquo;s a behaviour design pattern, which describes a way to re
             attributes: true,
             attributeFilter: ["data-theme"],
         });
+
+        
+        function injectDarkStyles() {
+            const theme = getCurrentTheme();
+            let existingStyle = document.getElementById(
+                "mermaid-dark-override",
+            );
+
+            if (theme === "dark") {
+                if (!existingStyle) {
+                    const style = document.createElement("style");
+                    style.id = "mermaid-dark-override";
+                    style.textContent = `
+                        .mermaid g.classGroup rect,
+                        .mermaid g.cluster rect,
+                        .mermaid .class rect {
+                            fill: #2a2a2a !important;
+                            stroke: #bb86fc !important;
+                            stroke-width: 2px !important;
+                        }
+
+                        .mermaid g.classGroup text,
+                        .mermaid g.cluster text,
+                        .mermaid .class text,
+                        .mermaid .classTitle,
+                        .mermaid .classBox text {
+                            fill: #e1e1e1 !important;
+                            color: #e1e1e1 !important;
+                        }
+
+                        .mermaid .edgeLabel rect {
+                            fill: #2a2a2a !important;
+                            stroke: #bb86fc !important;
+                        }
+
+                        .mermaid .edgeLabel text {
+                            fill: #e1e1e1 !important;
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+            } else {
+                if (existingStyle) {
+                    existingStyle.remove();
+                }
+            }
+        }
+
+        
+        const originalRender = mermaid.render;
+        mermaid.render = function (...args) {
+            return originalRender.apply(this, args).then((result) => {
+                setTimeout(injectDarkStyles, 50);
+                return result;
+            });
+        };
+
+        
+        injectDarkStyles();
     });
 </script>
 
@@ -251,17 +322,71 @@ Interpreter - it&rsquo;s a behaviour design pattern, which describes a way to re
     }
 
      
-    [data-theme="dark"] .mermaid .classGroup rect {
+    [data-theme="dark"] .mermaid .classGroup rect,
+    [data-theme="dark"] .mermaid .class rect,
+    [data-theme="dark"] .mermaid .cluster rect {
         fill: #2a2a2a !important;
-        stroke: #7c4dff !important;
+        stroke: #bb86fc !important;
+        stroke-width: 2px !important;
     }
 
-    [data-theme="dark"] .mermaid .classGroup text {
+    [data-theme="dark"] .mermaid .classGroup text,
+    [data-theme="dark"] .mermaid .class text,
+    [data-theme="dark"] .mermaid .cluster text,
+    [data-theme="dark"] .mermaid .classGroup .title,
+    [data-theme="dark"] .mermaid .class .title {
+        fill: #e1e1e1 !important;
+        color: #e1e1e1 !important;
+    }
+
+    [data-theme="dark"] .mermaid .relation,
+    [data-theme="dark"] .mermaid .relationshipLine {
+        stroke: #f1f1f1 !important;
+        stroke-width: 2px !important;
+    }
+
+     
+    [data-theme="dark"] .mermaid .classGroup .divider,
+    [data-theme="dark"] .mermaid .class .divider {
+        stroke: #bb86fc !important;
+    }
+
+     
+    [data-theme="dark"] .mermaid g.classGroup rect,
+    [data-theme="dark"] .mermaid g.cluster rect {
+        fill: #2a2a2a !important;
+        stroke: #bb86fc !important;
+        stroke-width: 2px !important;
+    }
+
+     
+    [data-theme="dark"] .mermaid .classGroup .classTitle,
+    [data-theme="dark"] .mermaid .classGroup .classBox text,
+    [data-theme="dark"] .mermaid g.classGroup text {
+        fill: #e1e1e1 !important;
+        color: #e1e1e1 !important;
+    }
+
+     
+    [data-theme="dark"] .mermaid .classGroup .classBox .method,
+    [data-theme="dark"] .mermaid .classGroup .classBox .attribute {
         fill: #e1e1e1 !important;
     }
 
-    [data-theme="dark"] .mermaid .relation {
-        stroke: #f1f1f1 !important;
+     
+    [data-theme="dark"] .mermaid .relationshipLabel text {
+        fill: #e1e1e1 !important;
+        background: #2a2a2a !important;
+    }
+
+     
+    [data-theme="dark"] .mermaid .edgeLabel rect {
+        fill: #2a2a2a !important;
+        stroke: #bb86fc !important;
+    }
+
+    [data-theme="dark"] .mermaid .edgeLabel text {
+        fill: #e1e1e1 !important;
     }
 </style>
 <meta property="og:url" content="https://blog.bugme.tech/posts/interpreter-pattern/">
