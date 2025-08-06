@@ -1,6 +1,6 @@
 +++
 date = '2025-08-06T16:27:12+03:00'
-draft = false
+draft = true
 title = 'Interpreter Pattern'
 +++
 
