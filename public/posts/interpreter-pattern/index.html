@@ -65,7 +65,206 @@ Interpreter - it&rsquo;s a behaviour design pattern, which describes a way to re
         }
 
     </style>
-</noscript><meta property="og:url" content="https://blog.bugme.tech/posts/interpreter-pattern/">
+</noscript>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let mermaidId = 0;
+
+        function getCurrentTheme() {
+            return document.documentElement.getAttribute("data-theme") ===
+                "dark"
+                ? "dark"
+                : "light";
+        }
+
+        function getMermaidConfig(theme) {
+            if (theme === "dark") {
+                return {
+                    startOnLoad: false,
+                    theme: "dark",
+                    themeVariables: {
+                        darkMode: true,
+                        primaryColor: "#bb86fc",
+                        primaryTextColor: "#e1e1e1",
+                        primaryBorderColor: "#7c4dff",
+                        lineColor: "#f1f1f1",
+                        sectionBkgColor: "#1a1a1a",
+                        altSectionBkgColor: "#2a2a2a",
+                        gridColor: "#404040",
+                        secondaryColor: "#03dac6",
+                        tertiaryColor: "#cf6679",
+                        background: "#121212",
+                        mainBkg: "#1e1e1e",
+                        secondBkg: "#2a2a2a",
+                        tertiaryBkg: "#3a3a3a",
+                        cScale0: "#121212",
+                        cScale1: "#1e1e1e",
+                        cScale2: "#2a2a2a",
+                    },
+                };
+            } else {
+                return {
+                    startOnLoad: false,
+                    theme: "default",
+                    themeVariables: {
+                        darkMode: false,
+                        primaryColor: "#6366f1",
+                        primaryTextColor: "#1f2937",
+                        primaryBorderColor: "#4f46e5",
+                        lineColor: "#374151",
+                        sectionBkgColor: "#f9fafb",
+                        altSectionBkgColor: "#f3f4f6",
+                        gridColor: "#e5e7eb",
+                        secondaryColor: "#10b981",
+                        tertiaryColor: "#f59e0b",
+                    },
+                };
+            }
+        }
+
+        function initMermaid() {
+            const theme = getCurrentTheme();
+            const config = getMermaidConfig(theme);
+            mermaid.initialize(config);
+
+            
+            document.querySelectorAll(".mermaid").forEach(function (element) {
+                if (!element.hasAttribute("data-processed")) {
+                    const id = "mermaid-" + ++mermaidId;
+                    const graphDefinition = element.textContent;
+                    element.innerHTML = "";
+
+                    mermaid
+                        .render(id, graphDefinition)
+                        .then(function (result) {
+                            element.innerHTML = result.svg;
+                            element.setAttribute("data-processed", "true");
+                        })
+                        .catch(function (error) {
+                            console.error("Mermaid rendering failed:", error);
+                            element.innerHTML =
+                                '<pre class="mermaid-error">Error rendering diagram</pre>';
+                        });
+                }
+            });
+        }
+
+        function reInitMermaid() {
+            
+            document.querySelectorAll(".mermaid").forEach(function (element) {
+                element.removeAttribute("data-processed");
+                
+                if (!element.hasAttribute("data-original")) {
+                    element.setAttribute("data-original", element.textContent);
+                } else {
+                    
+                    element.textContent = element.getAttribute("data-original");
+                }
+            });
+
+            
+            initMermaid();
+        }
+
+        
+        initMermaid();
+
+        
+        const observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                if (
+                    mutation.type === "attributes" &&
+                    mutation.attributeName === "data-theme"
+                ) {
+                    setTimeout(reInitMermaid, 100); 
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ["data-theme"],
+        });
+    });
+</script>
+
+<style>
+    .mermaid {
+        text-align: center;
+        margin: 20px 0;
+        overflow-x: auto;
+        background: transparent;
+    }
+
+    .mermaid svg {
+        max-width: 100%;
+        height: auto;
+        background: transparent;
+    }
+
+     
+    [data-theme="light"] .mermaid svg {
+        color: #1f2937;
+    }
+
+    [data-theme="dark"] .mermaid svg {
+        color: #e1e1e1;
+    }
+
+     
+    .mermaid-error {
+        color: #ef4444;
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 4px;
+        padding: 10px;
+        margin: 10px 0;
+        font-family: monospace;
+    }
+
+    [data-theme="dark"] .mermaid-error {
+        color: #fca5a5;
+        background: #450a0a;
+        border-color: #991b1b;
+    }
+
+     
+    @media (max-width: 768px) {
+        .mermaid {
+            margin: 15px 0;
+            font-size: 14px;
+        }
+    }
+
+     
+    [data-theme="dark"] .mermaid .edgePath path,
+    [data-theme="dark"] .mermaid .edgePath marker-end,
+    [data-theme="dark"] .mermaid .edgePath marker-start {
+        stroke: #f1f1f1 !important;
+        fill: #f1f1f1 !important;
+    }
+
+    [data-theme="dark"] .mermaid .arrowheadPath {
+        fill: #f1f1f1 !important;
+        stroke: #f1f1f1 !important;
+    }
+
+     
+    [data-theme="dark"] .mermaid .classGroup rect {
+        fill: #2a2a2a !important;
+        stroke: #7c4dff !important;
+    }
+
+    [data-theme="dark"] .mermaid .classGroup text {
+        fill: #e1e1e1 !important;
+    }
+
+    [data-theme="dark"] .mermaid .relation {
+        stroke: #f1f1f1 !important;
+    }
+</style>
+<meta property="og:url" content="https://blog.bugme.tech/posts/interpreter-pattern/">
   <meta property="og:site_name" content="Blog">
   <meta property="og:title" content="Interpreter Pattern">
   <meta property="og:description" content="Terminology Language grammar - a set of rules, which defines how to correctly form language constructions. Syntax - a part of grammar, which defines only an order of elements in the sentence, sentence structure, available element combinations. Abstract syntax tree (AST) - a tree-like data structure, which represents sentence syntax structure or expressions according to language grammar. Terminal expressions are the simplest language elements, which can no longer be decomposed into smaller parts. Non-terminal expression - a complex element, which can be decomposed into other expressions (terminal and/or non-terminal). “to interpret”, in the pattern context, means to analyze and execute commands or expressions, which are written in a specific language. Definition Interpreter - it’s a behaviour design pattern, which describes a way to represent language grammar by a class system, where each class is responsible for only one grammar rule, language sentences are interpreted by building and visiting an abstract syntax tree from instances of these classes.">
@@ -267,9 +466,11 @@ Interpreter - it&rsquo;s a behaviour design pattern, which describes a way to re
 <li><strong>Context</strong> - context which is global with regard to interpreter information and is used by all nodes for data exchange and state saving.</li>
 <li><strong>Client</strong> - client which creates (or receives already built) expression tree and runs the interpretation.</li>
 </ol>
-<pre tabindex="0"><code class="language-mermaid" data-lang="mermaid">classDiagram
+
+<div class="mermaid">
+classDiagram
     class AbstractExpression {
-        &lt;&lt;abstract&gt;&gt;
+        <<abstract>>
         +interpret(context: Context)
     }
 
@@ -293,14 +494,16 @@ Interpreter - it&rsquo;s a behaviour design pattern, which describes a way to re
         +interpret(expression: AbstractExpression)
     }
 
-    AbstractExpression &lt;|-- TerminalExpression
-    AbstractExpression &lt;|-- NonterminalExpression
+    AbstractExpression <|-- TerminalExpression
+    AbstractExpression <|-- NonterminalExpression
     NonterminalExpression *-- AbstractExpression : contains
-    Client --&gt; AbstractExpression : creates and uses
-    AbstractExpression --&gt; Context : uses
-    TerminalExpression --&gt; Context : uses
-    NonterminalExpression --&gt; Context : uses
-</code></pre><h1 id="pipeline">Pipeline<a hidden class="anchor" aria-hidden="true" href="#pipeline">#</a></h1>
+    Client --> AbstractExpression : creates and uses
+    AbstractExpression --> Context : uses
+    TerminalExpression --> Context : uses
+    NonterminalExpression --> Context : uses
+</div>
+
+<h1 id="pipeline">Pipeline<a hidden class="anchor" aria-hidden="true" href="#pipeline">#</a></h1>
 <ol>
 <li>Client creates (or receives already built) sentence tree, where nodes include objects of terminal and non-terminal classes.</li>
 <li>Client prepares context with initial data and runs tree handling.</li>
@@ -411,20 +614,7 @@ Interpreter - it&rsquo;s a behaviour design pattern, which describes a way to re
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
         <path d="M12 6H0l6-6z" />
     </svg>
-</a><script
-    src="https://cdn.jsdelivr.net/npm/mermaid@8.13.10/dist/mermaid.min.js"
-    integrity="sha256-CmZCFVnvol9YL23PfjDflGY5nJwE+Mf/JN+8v+tD/34="
-    crossorigin="anonymous"
-></script>
-
-<script>
-    mermaid.initialize({
-        startOnLoad: true,
-        securityLevel: "loose",
-        theme: "base",
-    });
-</script>
-
+</a>
 
 <script>
     let menu = document.getElementById('menu')
