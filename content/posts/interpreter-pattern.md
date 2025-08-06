@@ -31,7 +31,7 @@ title = 'Interpreter Pattern'
 4. **Context** - context which is global with regard to interpreter information and is used by all nodes for data exchange and state saving.
 5. **Client** - client which creates (or receives already built) expression tree and runs the interpretation.
 
-```mermaid
+{{< mermaid >}}
 classDiagram
     class AbstractExpression {
         <<abstract>>
@@ -65,7 +65,7 @@ classDiagram
     AbstractExpression --> Context : uses
     TerminalExpression --> Context : uses
     NonterminalExpression --> Context : uses
-```
+{{< /mermaid >}}
 
 # Pipeline
 

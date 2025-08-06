@@ -1,0 +1,59 @@
+{{- if .Page.Store.Get "hasMermaid" }}
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Initialize Mermaid with theme support
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: document.documentElement.getAttribute('data-theme') === 'dark'
+      }
+    });
+
+    // Re-render diagrams when theme changes
+    const observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+          const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+          mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: {
+              darkMode: isDark
+            }
+          });
+          // Re-render all mermaid diagrams
+          document.querySelectorAll('.mermaid').forEach(function(element) {
+            element.removeAttribute('data-processed');
+          });
+          mermaid.init();
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme']
+    });
+  });
+</script>
+
+<style>
+  .mermaid {
+    text-align: center;
+    margin: 20px 0;
+    overflow-x: auto;
+  }
+
+  .mermaid svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Dark theme adjustments */
+  [data-theme="dark"] .mermaid {
+    filter: invert(0);
+  }
+</style>
+{{- end }}
