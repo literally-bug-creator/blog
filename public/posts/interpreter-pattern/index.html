@@ -78,118 +78,173 @@ Interpreter - it&rsquo;s a behaviour design pattern, which describes a way to re
                 : "light";
         }
 
-        function getMermaidConfig(theme) {
+        function applyThemeToSVG(svg, theme) {
+            if (!svg) return;
+
             if (theme === "dark") {
-                return {
-                    startOnLoad: false,
-                    theme: "dark",
-                    themeVariables: {
-                        darkMode: true,
-                        primaryColor: "#bb86fc",
-                        primaryTextColor: "#e1e1e1",
-                        primaryBorderColor: "#bb86fc",
-                        lineColor: "#f1f1f1",
-                        sectionBkgColor: "#2a2a2a",
-                        altSectionBkgColor: "#1a1a1a",
-                        gridColor: "#404040",
-                        secondaryColor: "#03dac6",
-                        tertiaryColor: "#cf6679",
-                        background: "#121212",
-                        mainBkg: "#2a2a2a",
-                        secondBkg: "#1a1a1a",
-                        tertiaryBkg: "#3a3a3a",
-                        cScale0: "#2a2a2a",
-                        cScale1: "#1e1e1e",
-                        cScale2: "#121212",
-                        
-                        classText: "#e1e1e1",
-                        
-                        relationColor: "#f1f1f1",
-                        
-                        nodeBkg: "#2a2a2a",
-                        nodeBorder: "#bb86fc",
-                        clusterBkg: "#1a1a1a",
-                        clusterBorder: "#bb86fc",
-                        
-                        titleColor: "#e1e1e1",
-                        edgeLabelBackground: "#2a2a2a",
-                    },
+                
+                const colors = {
+                    background: "#2a2a2a",
+                    border: "#bb86fc",
+                    text: "#e1e1e1",
+                    line: "#f1f1f1",
                 };
+
+                
+                svg.querySelectorAll("rect").forEach((rect) => {
+                    const fill = rect.getAttribute("fill");
+                    const stroke = rect.getAttribute("stroke");
+
+                    if (fill && fill !== "none" && fill !== "transparent") {
+                        rect.setAttribute("fill", colors.background);
+                    }
+                    if (stroke && stroke !== "none") {
+                        rect.setAttribute("stroke", colors.border);
+                        rect.setAttribute("stroke-width", "2");
+                    }
+                });
+
+                
+                svg.querySelectorAll("text, tspan").forEach((text) => {
+                    text.setAttribute("fill", colors.text);
+                    text.style.fill = colors.text;
+                });
+
+                
+                svg.querySelectorAll("path, line, polyline").forEach(
+                    (element) => {
+                        if (
+                            element.getAttribute("stroke") &&
+                            element.getAttribute("stroke") !== "none"
+                        ) {
+                            element.setAttribute("stroke", colors.line);
+                            element.setAttribute("stroke-width", "2");
+                        }
+                        if (
+                            element.getAttribute("fill") &&
+                            element.getAttribute("fill") !== "none" &&
+                            element.getAttribute("fill") !== "transparent"
+                        ) {
+                            element.setAttribute("fill", colors.line);
+                        }
+                    },
+                );
+
+                
+                svg.querySelectorAll("marker path").forEach((path) => {
+                    path.setAttribute("fill", colors.line);
+                    path.setAttribute("stroke", colors.line);
+                });
             } else {
-                return {
-                    startOnLoad: false,
-                    theme: "default",
-                    themeVariables: {
-                        darkMode: false,
-                        primaryColor: "#6366f1",
-                        primaryTextColor: "#1f2937",
-                        primaryBorderColor: "#4f46e5",
-                        lineColor: "#374151",
-                        sectionBkgColor: "#f9fafb",
-                        altSectionBkgColor: "#f3f4f6",
-                        gridColor: "#e5e7eb",
-                        secondaryColor: "#10b981",
-                        tertiaryColor: "#f59e0b",
-                    },
+                
+                const colors = {
+                    background: "#ffffff",
+                    border: "#6366f1",
+                    text: "#1f2937",
+                    line: "#374151",
                 };
+
+                svg.querySelectorAll("rect").forEach((rect) => {
+                    const fill = rect.getAttribute("fill");
+                    const stroke = rect.getAttribute("stroke");
+
+                    if (fill && fill !== "none" && fill !== "transparent") {
+                        rect.setAttribute("fill", colors.background);
+                    }
+                    if (stroke && stroke !== "none") {
+                        rect.setAttribute("stroke", colors.border);
+                    }
+                });
+
+                svg.querySelectorAll("text, tspan").forEach((text) => {
+                    text.setAttribute("fill", colors.text);
+                    text.style.fill = colors.text;
+                });
+
+                svg.querySelectorAll("path, line, polyline").forEach(
+                    (element) => {
+                        if (
+                            element.getAttribute("stroke") &&
+                            element.getAttribute("stroke") !== "none"
+                        ) {
+                            element.setAttribute("stroke", colors.line);
+                        }
+                        if (
+                            element.getAttribute("fill") &&
+                            element.getAttribute("fill") !== "none" &&
+                            element.getAttribute("fill") !== "transparent"
+                        ) {
+                            element.setAttribute("fill", colors.line);
+                        }
+                    },
+                );
+
+                svg.querySelectorAll("marker path").forEach((path) => {
+                    path.setAttribute("fill", colors.line);
+                    path.setAttribute("stroke", colors.line);
+                });
             }
         }
 
-        function initMermaid() {
-            const theme = getCurrentTheme();
-            const config = getMermaidConfig(theme);
-            mermaid.initialize(config);
+        function renderDiagram(element) {
+            if (element.hasAttribute("data-processed")) return;
 
-            
-            document.querySelectorAll(".mermaid").forEach(function (element) {
-                if (!element.hasAttribute("data-processed")) {
-                    const id = "mermaid-" + ++mermaidId;
-                    const graphDefinition = element.textContent;
-                    element.innerHTML = "";
+            const id = "mermaid-" + ++mermaidId;
+            const graphDefinition =
+                element.getAttribute("data-original") || element.textContent;
 
-                    mermaid
-                        .render(id, graphDefinition)
-                        .then(function (result) {
-                            element.innerHTML = result.svg;
-                            element.setAttribute("data-processed", "true");
-                        })
-                        .catch(function (error) {
-                            console.error("Mermaid rendering failed:", error);
-                            element.innerHTML =
-                                '<pre class="mermaid-error">Error rendering diagram</pre>';
-                        });
-                }
-            });
+            if (!element.hasAttribute("data-original")) {
+                element.setAttribute("data-original", graphDefinition);
+            }
+
+            element.innerHTML = "Loading diagram...";
+
+            mermaid
+                .render(id, graphDefinition)
+                .then((result) => {
+                    element.innerHTML = result.svg;
+                    element.setAttribute("data-processed", "true");
+
+                    
+                    const svg = element.querySelector("svg");
+                    applyThemeToSVG(svg, getCurrentTheme());
+                })
+                .catch((error) => {
+                    console.error("Mermaid rendering failed:", error);
+                    element.innerHTML =
+                        '<div class="mermaid-error">Error rendering diagram</div>';
+                });
         }
 
-        function reInitMermaid() {
+        function initMermaid() {
             
-            document.querySelectorAll(".mermaid").forEach(function (element) {
-                element.removeAttribute("data-processed");
-                
-                if (!element.hasAttribute("data-original")) {
-                    element.setAttribute("data-original", element.textContent);
-                } else {
-                    
-                    element.textContent = element.getAttribute("data-original");
-                }
+            mermaid.initialize({
+                startOnLoad: false,
+                theme: "default",
             });
 
             
-            initMermaid();
+            document.querySelectorAll(".mermaid").forEach(renderDiagram);
+        }
+
+        function reRenderDiagrams() {
+            document.querySelectorAll(".mermaid").forEach((element) => {
+                element.removeAttribute("data-processed");
+                renderDiagram(element);
+            });
         }
 
         
         initMermaid();
 
         
-        const observer = new MutationObserver(function (mutations) {
-            mutations.forEach(function (mutation) {
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
                 if (
                     mutation.type === "attributes" &&
                     mutation.attributeName === "data-theme"
                 ) {
-                    setTimeout(reInitMermaid, 100); 
+                    setTimeout(reRenderDiagrams, 100);
                 }
             });
         });
@@ -198,65 +253,6 @@ Interpreter - it&rsquo;s a behaviour design pattern, which describes a way to re
             attributes: true,
             attributeFilter: ["data-theme"],
         });
-
-        
-        function injectDarkStyles() {
-            const theme = getCurrentTheme();
-            let existingStyle = document.getElementById(
-                "mermaid-dark-override",
-            );
-
-            if (theme === "dark") {
-                if (!existingStyle) {
-                    const style = document.createElement("style");
-                    style.id = "mermaid-dark-override";
-                    style.textContent = `
-                        .mermaid g.classGroup rect,
-                        .mermaid g.cluster rect,
-                        .mermaid .class rect {
-                            fill: #2a2a2a !important;
-                            stroke: #bb86fc !important;
-                            stroke-width: 2px !important;
-                        }
-
-                        .mermaid g.classGroup text,
-                        .mermaid g.cluster text,
-                        .mermaid .class text,
-                        .mermaid .classTitle,
-                        .mermaid .classBox text {
-                            fill: #e1e1e1 !important;
-                            color: #e1e1e1 !important;
-                        }
-
-                        .mermaid .edgeLabel rect {
-                            fill: #2a2a2a !important;
-                            stroke: #bb86fc !important;
-                        }
-
-                        .mermaid .edgeLabel text {
-                            fill: #e1e1e1 !important;
-                        }
-                    `;
-                    document.head.appendChild(style);
-                }
-            } else {
-                if (existingStyle) {
-                    existingStyle.remove();
-                }
-            }
-        }
-
-        
-        const originalRender = mermaid.render;
-        mermaid.render = function (...args) {
-            return originalRender.apply(this, args).then((result) => {
-                setTimeout(injectDarkStyles, 50);
-                return result;
-            });
-        };
-
-        
-        injectDarkStyles();
     });
 </script>
 
@@ -274,16 +270,6 @@ Interpreter - it&rsquo;s a behaviour design pattern, which describes a way to re
         background: transparent;
     }
 
-     
-    [data-theme="light"] .mermaid svg {
-        color: #1f2937;
-    }
-
-    [data-theme="dark"] .mermaid svg {
-        color: #e1e1e1;
-    }
-
-     
     .mermaid-error {
         color: #ef4444;
         background: #fef2f2;
@@ -300,93 +286,11 @@ Interpreter - it&rsquo;s a behaviour design pattern, which describes a way to re
         border-color: #991b1b;
     }
 
-     
     @media (max-width: 768px) {
         .mermaid {
             margin: 15px 0;
             font-size: 14px;
         }
-    }
-
-     
-    [data-theme="dark"] .mermaid .edgePath path,
-    [data-theme="dark"] .mermaid .edgePath marker-end,
-    [data-theme="dark"] .mermaid .edgePath marker-start {
-        stroke: #f1f1f1 !important;
-        fill: #f1f1f1 !important;
-    }
-
-    [data-theme="dark"] .mermaid .arrowheadPath {
-        fill: #f1f1f1 !important;
-        stroke: #f1f1f1 !important;
-    }
-
-     
-    [data-theme="dark"] .mermaid .classGroup rect,
-    [data-theme="dark"] .mermaid .class rect,
-    [data-theme="dark"] .mermaid .cluster rect {
-        fill: #2a2a2a !important;
-        stroke: #bb86fc !important;
-        stroke-width: 2px !important;
-    }
-
-    [data-theme="dark"] .mermaid .classGroup text,
-    [data-theme="dark"] .mermaid .class text,
-    [data-theme="dark"] .mermaid .cluster text,
-    [data-theme="dark"] .mermaid .classGroup .title,
-    [data-theme="dark"] .mermaid .class .title {
-        fill: #e1e1e1 !important;
-        color: #e1e1e1 !important;
-    }
-
-    [data-theme="dark"] .mermaid .relation,
-    [data-theme="dark"] .mermaid .relationshipLine {
-        stroke: #f1f1f1 !important;
-        stroke-width: 2px !important;
-    }
-
-     
-    [data-theme="dark"] .mermaid .classGroup .divider,
-    [data-theme="dark"] .mermaid .class .divider {
-        stroke: #bb86fc !important;
-    }
-
-     
-    [data-theme="dark"] .mermaid g.classGroup rect,
-    [data-theme="dark"] .mermaid g.cluster rect {
-        fill: #2a2a2a !important;
-        stroke: #bb86fc !important;
-        stroke-width: 2px !important;
-    }
-
-     
-    [data-theme="dark"] .mermaid .classGroup .classTitle,
-    [data-theme="dark"] .mermaid .classGroup .classBox text,
-    [data-theme="dark"] .mermaid g.classGroup text {
-        fill: #e1e1e1 !important;
-        color: #e1e1e1 !important;
-    }
-
-     
-    [data-theme="dark"] .mermaid .classGroup .classBox .method,
-    [data-theme="dark"] .mermaid .classGroup .classBox .attribute {
-        fill: #e1e1e1 !important;
-    }
-
-     
-    [data-theme="dark"] .mermaid .relationshipLabel text {
-        fill: #e1e1e1 !important;
-        background: #2a2a2a !important;
-    }
-
-     
-    [data-theme="dark"] .mermaid .edgeLabel rect {
-        fill: #2a2a2a !important;
-        stroke: #bb86fc !important;
-    }
-
-    [data-theme="dark"] .mermaid .edgeLabel text {
-        fill: #e1e1e1 !important;
     }
 </style>
 <meta property="og:url" content="https://blog.bugme.tech/posts/interpreter-pattern/">
