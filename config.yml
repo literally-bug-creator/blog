@@ -52,6 +52,10 @@ params:
   author: Ivan Deyna
 
   defaultTheme: dark
+
+  analytics:
+    yandexMetrika:
+      id: 103622421
   disableThemeToggle: true
   ShowShareButtons: true
   ShowReadingTime: true
@@ -160,8 +164,6 @@ markup:
 #     privacyEnhanced: true
 
 services:
-  googleAnalytics:
-    ID: "G-2BVVEQESD6"
   instagram:
     disableInlineCSS: true
   x:
