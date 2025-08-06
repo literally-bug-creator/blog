@@ -4,188 +4,52 @@
     document.addEventListener("DOMContentLoaded", function () {
         let mermaidId = 0;
 
-        function getCurrentTheme() {
-            return document.documentElement.getAttribute("data-theme") ===
-                "dark"
-                ? "dark"
-                : "light";
-        }
-
-        function applyThemeToSVG(svg, theme) {
-            if (!svg) return;
-
-            if (theme === "dark") {
-                // Dark theme colors
-                const colors = {
-                    background: "#2a2a2a",
-                    border: "#bb86fc",
-                    text: "#e1e1e1",
-                    line: "#f1f1f1",
-                };
-
-                // Class boxes and rectangles
-                svg.querySelectorAll("rect").forEach((rect) => {
-                    const fill = rect.getAttribute("fill");
-                    const stroke = rect.getAttribute("stroke");
-
-                    if (fill && fill !== "none" && fill !== "transparent") {
-                        rect.setAttribute("fill", colors.background);
-                    }
-                    if (stroke && stroke !== "none") {
-                        rect.setAttribute("stroke", colors.border);
-                        rect.setAttribute("stroke-width", "2");
-                    }
-                });
-
-                // All text elements
-                svg.querySelectorAll("text, tspan").forEach((text) => {
-                    text.setAttribute("fill", colors.text);
-                    text.style.fill = colors.text;
-                });
-
-                // Lines and paths (relationships, arrows)
-                svg.querySelectorAll("path, line, polyline").forEach(
-                    (element) => {
-                        if (
-                            element.getAttribute("stroke") &&
-                            element.getAttribute("stroke") !== "none"
-                        ) {
-                            element.setAttribute("stroke", colors.line);
-                            element.setAttribute("stroke-width", "2");
-                        }
-                        if (
-                            element.getAttribute("fill") &&
-                            element.getAttribute("fill") !== "none" &&
-                            element.getAttribute("fill") !== "transparent"
-                        ) {
-                            element.setAttribute("fill", colors.line);
-                        }
-                    },
-                );
-
-                // Markers (arrowheads)
-                svg.querySelectorAll("marker path").forEach((path) => {
-                    path.setAttribute("fill", colors.line);
-                    path.setAttribute("stroke", colors.line);
-                });
-            } else {
-                // Light theme - use default colors
-                const colors = {
-                    background: "#ffffff",
-                    border: "#6366f1",
-                    text: "#1f2937",
-                    line: "#374151",
-                };
-
-                svg.querySelectorAll("rect").forEach((rect) => {
-                    const fill = rect.getAttribute("fill");
-                    const stroke = rect.getAttribute("stroke");
-
-                    if (fill && fill !== "none" && fill !== "transparent") {
-                        rect.setAttribute("fill", colors.background);
-                    }
-                    if (stroke && stroke !== "none") {
-                        rect.setAttribute("stroke", colors.border);
-                    }
-                });
-
-                svg.querySelectorAll("text, tspan").forEach((text) => {
-                    text.setAttribute("fill", colors.text);
-                    text.style.fill = colors.text;
-                });
-
-                svg.querySelectorAll("path, line, polyline").forEach(
-                    (element) => {
-                        if (
-                            element.getAttribute("stroke") &&
-                            element.getAttribute("stroke") !== "none"
-                        ) {
-                            element.setAttribute("stroke", colors.line);
-                        }
-                        if (
-                            element.getAttribute("fill") &&
-                            element.getAttribute("fill") !== "none" &&
-                            element.getAttribute("fill") !== "transparent"
-                        ) {
-                            element.setAttribute("fill", colors.line);
-                        }
-                    },
-                );
-
-                svg.querySelectorAll("marker path").forEach((path) => {
-                    path.setAttribute("fill", colors.line);
-                    path.setAttribute("stroke", colors.line);
-                });
-            }
-        }
-
         function renderDiagram(element) {
             if (element.hasAttribute("data-processed")) return;
 
             const id = "mermaid-" + ++mermaidId;
-            const graphDefinition =
-                element.getAttribute("data-original") || element.textContent;
-
-            if (!element.hasAttribute("data-original")) {
-                element.setAttribute("data-original", graphDefinition);
-            }
-
-            element.innerHTML = "Loading diagram...";
+            const code = element.textContent;
 
             mermaid
-                .render(id, graphDefinition)
+                .render(id, code)
                 .then((result) => {
                     element.innerHTML = result.svg;
                     element.setAttribute("data-processed", "true");
-
-                    // Apply theme immediately
-                    const svg = element.querySelector("svg");
-                    applyThemeToSVG(svg, getCurrentTheme());
                 })
                 .catch((error) => {
-                    console.error("Mermaid rendering failed:", error);
+                    console.error("Mermaid error:", error);
                     element.innerHTML =
-                        '<div class="mermaid-error">Error rendering diagram</div>';
+                        '<div class="mermaid-error">Diagram error</div>';
                 });
         }
 
-        function initMermaid() {
-            // Initialize Mermaid with basic config
-            mermaid.initialize({
-                startOnLoad: false,
-                theme: "default",
-            });
-
-            // Process all mermaid diagrams
-            document.querySelectorAll(".mermaid").forEach(renderDiagram);
-        }
-
-        function reRenderDiagrams() {
-            document.querySelectorAll(".mermaid").forEach((element) => {
-                element.removeAttribute("data-processed");
-                renderDiagram(element);
-            });
-        }
-
-        // Initial render
-        initMermaid();
-
-        // Watch for theme changes
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if (
-                    mutation.type === "attributes" &&
-                    mutation.attributeName === "data-theme"
-                ) {
-                    setTimeout(reRenderDiagrams, 100);
-                }
-            });
+        // Initialize with light theme for dark site
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: "default",
+            themeVariables: {
+                primaryColor: "#f8f9fa",
+                primaryTextColor: "#212529",
+                primaryBorderColor: "#6c757d",
+                lineColor: "#ffffff",
+                secondaryColor: "#0d6efd",
+                tertiaryColor: "#fd7e14",
+                background: "#ffffff",
+                mainBkg: "#f8f9fa",
+                secondBkg: "#e9ecef",
+                tertiaryBkg: "#dee2e6",
+                classText: "#212529",
+                nodeBkg: "#f8f9fa",
+                nodeBorder: "#6c757d",
+                clusterBkg: "#e9ecef",
+                clusterBorder: "#6c757d",
+                relationColor: "#ffffff",
+                edgeLabelBackground: "#f8f9fa",
+            },
         });
 
-        observer.observe(document.documentElement, {
-            attributes: true,
-            attributeFilter: ["data-theme"],
-        });
+        // Render all diagrams
+        document.querySelectorAll(".mermaid").forEach(renderDiagram);
     });
 </script>
 
@@ -194,36 +58,56 @@
         text-align: center;
         margin: 20px 0;
         overflow-x: auto;
-        background: transparent;
     }
 
     .mermaid svg {
         max-width: 100%;
         height: auto;
-        background: transparent;
     }
 
     .mermaid-error {
-        color: #ef4444;
-        background: #fef2f2;
-        border: 1px solid #fecaca;
+        color: #fca5a5;
+        background: #450a0a;
+        border: 1px solid #991b1b;
         border-radius: 4px;
         padding: 10px;
-        margin: 10px 0;
         font-family: monospace;
     }
 
-    [data-theme="dark"] .mermaid-error {
-        color: #fca5a5;
-        background: #450a0a;
-        border-color: #991b1b;
+    /* Optimal colors for dark background */
+    .mermaid rect {
+        fill: #f8f9fa !important;
+        stroke: #6c757d !important;
+        stroke-width: 1.5px !important;
     }
 
-    @media (max-width: 768px) {
-        .mermaid {
-            margin: 15px 0;
-            font-size: 14px;
-        }
+    .mermaid text {
+        fill: #212529 !important;
+        font-weight: 500 !important;
+    }
+
+    .mermaid .edgePath path,
+    .mermaid .flowchart-link,
+    .mermaid .relation {
+        stroke: #ffffff !important;
+        stroke-width: 1.5px !important;
+    }
+
+    .mermaid .arrowheadPath,
+    .mermaid marker path {
+        fill: #ffffff !important;
+        stroke: #ffffff !important;
+    }
+
+    .mermaid .edgeLabel rect {
+        fill: #f8f9fa !important;
+        stroke: #6c757d !important;
+    }
+
+    .mermaid .cluster rect {
+        fill: #e9ecef !important;
+        stroke: #6c757d !important;
+        stroke-width: 1.5px !important;
     }
 </style>
 {{- end }}
